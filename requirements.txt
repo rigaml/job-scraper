@@ -1,0 +1,5 @@
+selenium
+webdriver-manager
+sqlalchemy
+pytest
+pytest-cov
