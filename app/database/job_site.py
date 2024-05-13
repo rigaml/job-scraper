@@ -1,18 +1,17 @@
-"""Models module."""
-
-from sqlalchemy import Column, String, Boolean, Integer
+from sqlalchemy import String, Boolean
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .database import Base
 
-
 class JobSite(Base):
-
-    # SQLite convention for table names: use snake_case for table names and singular nouns.
     __tablename__ = "job_site"
 
-    id = Column(Integer, primary_key=True)
-    url = Column(String, unique=True)
-    is_active = Column(Boolean, default=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    url: Mapped[str] = mapped_column(String, unique=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+
+    # Optional: Define the relationship to User
+    jobs = relationship("User", back_populates="job_site")
 
     def __repr__(self):
         return f"id: {self.id}\n" \

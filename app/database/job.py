@@ -1,34 +1,32 @@
-"""Models module."""
-
-from sqlalchemy import Column, ForeignKey, UniqueConstraint, String, Integer
+from sqlalchemy import ForeignKey, UniqueConstraint
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .database import Base
 
-
 class User(Base):
-
     __tablename__ = "job"
 
-    id = Column(Integer, primary_key=True)
-    job_site_id = Column(Integer, ForeignKey("job_site.id"))
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    job_site_id: Mapped[int] = mapped_column(ForeignKey("job_site.id"), nullable=False)
+    ref: Mapped[str]
+    title: Mapped[str]
+    salary: Mapped[int]
+    location: Mapped[str]
+    type: Mapped[str]
+    when: Mapped[str]
+    skills: Mapped[str]
+    duration: Mapped[str]
+    start_date: Mapped[str]
+    rate: Mapped[str]
+    recruiter: Mapped[str]
+    posted_date: Mapped[str]
+    permalink: Mapped[str]
 
-    ref = Column(String)
-    title = Column(String)
-    salary = Column(Integer)
-    location = Column(String)
-    type = Column(String)
-    when = Column(String)
-    skills = Column(String)
-    duration = Column(String)
-    start_date = Column(String)
-    rate = Column(String)
-    recruiter = Column(String)
-    posted_date = Column(String)
-    permalink = Column(String)
-    
     __table_args__ = (
         UniqueConstraint("job_site_id", "ref"),
     )
+
+    job_site = relationship("JobSite", back_populates="jobs")
 
     def __str__(self):
         return (
