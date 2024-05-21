@@ -1,111 +1,146 @@
+"""Scraper for Jobserve website"""
+import logging
 import time
-from typing import List
+from typing import List, Optional
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 
-from scrapers.base_scraper import BaseScrapper
+from scrapers.jobs_scraper import JobsScraper
 from models.job import Job
 
-import utilities.text_utils as text_utils
-import utilities.html_utils as html_utils
+import utils.text_utils as text_utils
+import utils.html_utils as html_utils
+
+logger = logging.getLogger(__name__)
 
 
-class JobServeScraper(BaseScrapper):
-    JOBS_URL = "https://www.jobserve.com/gb/en/JobSearch.aspx?shid="
+class JobserveScraper(JobsScraper):
+    """Extract jobs from Jobserve"""
 
-    def __init__(self, session_id, show_browser= False):
-        self.jobs_url = self.JOBS_URL + session_id
+    _SITE_NAME = "jobserve"
+    _JOBS_URL = "https://www.jobserve.com/gb/en/JobSearch.aspx?shid="
+    # Selector list of offers
+    _SEL_JOB_LIST = '#jsJobResContent .jobItem'
+    # Selectors fields for each item in the list of offers
+    _SEL_JOB_ITEM_TITLE = '.jobResultsTitle'
+    _SEL_JOB_ITEM_SALARY = '.jobResultsSalary'
+    _SEL_JOB_ITEM_LOC = '.jobResultsLoc'
+    _SEL_JOB_ITEM_TYPE = '.jobResultsType'
+    # Selector job details container
+    _SEL_JOB_DETAIL_CONTAINER = "#JobDetailContainer .jsCustomScrollContainer"
+    # Job details description
+    _SEL_JOB_DETAIL_SKILLS = '#md_skills'
+    _SEL_JOB_DETAIL_DURATION = '#md_duration'
+    _SEL_JOB_DETAIL_START_DATE = '#md_start_date'
+    _SEL_JOB_DETAIL_RATE = '#md_rate'
+    _SEL_JOB_DETAIL_RECRUITER = '#md_recruiter'
+    _SEL_JOB_DETAIL_REF = '#md_ref'
+    _SEL_JOB_DETAIL_POSTED_DATE = '#md_posted_date'
+    _SEL_JOB_DETAIL_PERMALINK = '#md_permalink'
+
+    def __init__(self, session_id, show_browser=False):
+        self.jobs_url = self._JOBS_URL + session_id
         super().__init__(self.jobs_url, show_browser)
 
-    def scrape_jobs(self, retrieve_jobs_max: int, print_trace= False) -> List[Job]:
-        # Selector list of offers
-        sel_job_list = '#jsJobResContent .jobItem'
-        
-        # Selectors fields for each item in the list of offers
-        sel_job_item_title = '.jobResultsTitle'
-        sel_job_item_salary = '.jobResultsSalary'
-        sel_job_item_loc = '.jobResultsLoc'
-        sel_job_item_type = '.jobResultsType'
-        sel_job_item_when = '.when'
+    def get_site_name(self) -> str:
+        """Returns the site name this class scrapes"""
 
-        # Selector job details container
-        sel_job_detail_container = "#JobDetailContainer .jsCustomScrollContainer"
+        return self._SITE_NAME
 
-        # Job details description
-        sel_job_detail_skills = '#md_skills'
-        sel_job_detail_duration = '#md_duration'
-        sel_job_detail_start_date = '#md_start_date'
-        sel_job_detail_rate = '#md_rate'
-        sel_job_detail_recruiter = '#md_recruiter'
-        sel_job_detail_ref = '#md_ref'
-        sel_job_detail_posted_date = '#md_posted_date'
-        sel_job_detail_permalink = '#md_permalink'
+    def scrape(self, max_jobs_retrieve: int) -> List[Job]:
+        """Scrape job listings returning list of Job objects."""
 
-        # Find all job offer items in the list
-        job_items = WebDriverWait(self.driver, 10).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, sel_job_list)))
-        
-        if print_trace: print(f"Job_tems found: {len(job_items)} and max required: {retrieve_jobs_max}")
-        
-        job_items = job_items[: min(len(job_items), retrieve_jobs_max)]
+        job_items = self._get_job_items(max_jobs_retrieve)
+
         retrieved_jobs = []
-
         for index, job_item in enumerate(job_items):
-            if print_trace: print(f"**Job Index: {index + 1}")
+            logger.debug("**Job Index: %s", index + 1)
+            self._click_job_item(job_item)
+            current_job = self._extract_job_details(job_item)
+            retrieved_jobs.append(current_job)
+            logger.debug("Retrieved job: %s", current_job)
 
-            # Click on the job item to load its details into the div; text outside the view can't be seen by Selenium
-            ActionChains(self.driver).move_to_element(job_item).click(job_item).perform()
+        return retrieved_jobs
+
+    def _get_job_items(self, max_jobs_retrieve: int) -> List[WebElement]:
+        """Retrieve job items from the listing page. Returns a maximum of 'retrieve_jobs_max' items."""
+        try:
+            job_items = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_all_elements_located((By.CSS_SELECTOR, self._SEL_JOB_LIST))
+            )
+
+            logger.debug("Job items found: %s and max required: %s", len(job_items), max_jobs_retrieve)
+
+            return job_items[:min(len(job_items), max_jobs_retrieve)]
+        except Exception as e:
+            logger.error("Error retrieving job items: %s", e)
+            return []
+
+    def _click_job_item(self, job_element: WebElement):
+        """Click on a job item to load its details."""
+        try:
+            ActionChains(self.driver).move_to_element(job_element).click(job_element).perform()
             time.sleep(2)
+        except Exception as e:
+            logger.error("Error clicking on job item: %s", e)
 
-            current_job= Job()
-            # Extract fields in job item section
-            current_job.title = html_utils.find_element_or_none(job_item, sel_job_item_title)
-            current_job.salary = html_utils.find_element_or_none(job_item, sel_job_item_salary)
-            current_job.loc = html_utils.find_element_or_none(job_item, sel_job_item_loc)
-            current_job.type = html_utils.find_element_or_none(job_item, sel_job_item_type)
-            current_job.when = html_utils.find_element_or_none(job_item, sel_job_item_when)
-            
-            # Select the job detail section
-            job_detail_container = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, sel_job_detail_container)))
+    def _extract_job_details(self, job_element: WebElement) -> Job:
+        """Extract job details from a job item."""
+        job = Job()
+        job.title = html_utils.find_element_text(job_element, self._SEL_JOB_ITEM_TITLE)
+        job.salary = html_utils.find_element_text(job_element, self._SEL_JOB_ITEM_SALARY)
+        job.loc = html_utils.find_element_text(job_element, self._SEL_JOB_ITEM_LOC)
+        job.type = html_utils.find_element_text(job_element, self._SEL_JOB_ITEM_TYPE)
 
-            # Get the scrollable height of the detail container 
-            scroll_height = self.driver.execute_script("return arguments[0].scrollHeight;", job_detail_container)
-            if print_trace: print(f"scroll_height: {scroll_height}")
+        job_detail_container = self._get_job_detail_container()
+        if job_detail_container:
+            self._scroll_and_extract_details(job_detail_container, job)
+
+        return job
+
+    def _get_job_detail_container(self) -> Optional[WebElement]:
+        """Retrieve the job detail container element."""
+        try:
+            return WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, self._SEL_JOB_DETAIL_CONTAINER))
+            )
+        except Exception as e:
+            logger.error("Error retrieving job detail container: %s", e)
+            return None
+
+    def _scroll_and_extract_details(self, container: WebElement, job: Job):
+        """Scroll through the job details container and extract the details."""
+        try:
+            scroll_height = self.driver.execute_script("return arguments[0].scrollHeight;", container)
+            logger.debug("Scrolling height: %s", scroll_height)
 
             current_scroll_position = 0
-            increase = 100
-            # As selenium only retrieve the visible area then scroll to get every bit of text
+            pixels_scroll = 100
             while current_scroll_position < scroll_height:
-                self.driver.execute_script(f"arguments[0].style.top = '-{current_scroll_position}px';", job_detail_container)
-                current_scroll_position += increase
-                # Wait for some time to allow content to load (you may adjust the time as needed)
+                self.driver.execute_script(f"arguments[0].scrollTop = {current_scroll_position};", container)
+                current_scroll_position += pixels_scroll
                 time.sleep(1)
-                
-                skills_try = html_utils.find_element_or_none(job_detail_container, sel_job_detail_skills)
-                current_job.skills = text_utils.join_without_overlap(current_job.skills, skills_try)
-                duration_try = html_utils.find_element_or_none(job_detail_container, sel_job_detail_duration)
-                current_job.duration = text_utils.join_without_overlap(current_job.duration, duration_try)
-                start_date_try = html_utils.find_element_or_none(job_detail_container, sel_job_detail_start_date)
-                current_job.start_date = text_utils.join_without_overlap(current_job.start_date, start_date_try)
-                rate_try = html_utils.find_element_or_none(job_detail_container, sel_job_detail_rate)
-                current_job.rate = text_utils.join_without_overlap(current_job.rate, rate_try)
-                recruiter_try = html_utils.find_element_or_none(job_detail_container, sel_job_detail_recruiter)
-                current_job.recruiter = text_utils.join_without_overlap(current_job.recruiter, recruiter_try)
-                ref_try = html_utils.find_element_or_none(job_detail_container, sel_job_detail_ref)
-                current_job.ref = text_utils.join_without_overlap(current_job.ref, ref_try)
-                posted_date_try = html_utils.find_element_or_none(job_detail_container, sel_job_detail_posted_date)
-                current_job.posted_date = text_utils.join_without_overlap(current_job.posted_date, posted_date_try)
-                permalink_try = html_utils.find_element_or_none(job_detail_container, sel_job_detail_permalink)
-                current_job.permalink = text_utils.join_without_overlap(current_job.permalink, permalink_try)
 
-            if print_trace: 
-                print(f"{index + 1}-Item\ntitle:{current_job.title}\nsalary:{current_job.salary}\nloc:{current_job.loc}\ntype:{type}\nwhen:{current_job.when}\n")
-                print(f"{index + 1}-Details\nskills:{current_job.skills}\nduration:{current_job.duration}\nstart_date:{current_job.start_date}\nrecruiter:{current_job.recruiter}\nref:{ref}\nposted_date:{current_job.posted_date}\npermalink:{current_job.permalink}\n")
+                job.skills = text_utils.join_without_overlap(
+                    job.skills, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_SKILLS))
+                job.duration = text_utils.join_without_overlap(
+                    job.duration, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_DURATION))
+                job.start_date = text_utils.join_without_overlap(
+                    job.start_date, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_START_DATE))
+                job.rate = text_utils.join_without_overlap(
+                    job.rate, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_RATE))
+                job.recruiter = text_utils.join_without_overlap(
+                    job.recruiter, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_RECRUITER))
+                job.ref = text_utils.join_without_overlap(
+                    job.ref, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_REF))
+                job.posted_date = text_utils.join_without_overlap(
+                    job.posted_date, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_POSTED_DATE))
+                job.permalink = text_utils.join_without_overlap(
+                    job.permalink, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_PERMALINK))
 
-            retrieved_jobs.append(current_job)                
-
-            return retrieved_jobs
-
-
+        except Exception as e:
+            logger.error("Error during scrolling and extracting details: %s", e)

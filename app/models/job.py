@@ -1,3 +1,8 @@
+"""
+Contains the information scraped from the website.
+"""
+
+
 class Job:
     def __init__(self):
         self.ref = ""
@@ -5,28 +10,26 @@ class Job:
         self.salary = ""
         self.loc = ""
         self.type = ""
-        self.when = ""
         self.skills = ""
         self.duration = ""
         self.start_date = ""
         self.rate = ""
-        self.recruiter = "" 
+        self.recruiter = ""
         self.posted_date = ""
         self.permalink = ""
-    
+
     def __str__(self):
         return (
-            f"Job Title: {self.title}\n"
-            f"Salary: {self.salary}\n"
-            f"Location: {self.loc}\n"
-            f"Type: {self.type}\n"
-            f"When: {self.when}\n"
-            f"Skills: {self.skills}\n"
-            f"Duration: {self.duration}\n"
-            f"Start Date: {self.start_date}\n"
-            f"Rate: {self.rate}\n"
-            f"Recruiter: {self.recruiter}\n"
-            f"Reference: {self.ref}\n"
-            f"Posted Date: {self.posted_date}\n"
-            f"Permalink: {self.permalink}"
+            f"Job(ref= {self.ref}, "
+            f"title= {self.title}, "
+            f"salary= {self.salary}, "
+            f"loc= {self.loc}, "
+            f"type= {self.type}, "
+            f"skills= {self.skills}, "
+            f"duration= {self.duration}, "
+            f"start_date= {self.start_date}, "
+            f"rate= {self.rate}, "
+            f"recruiter= {self.recruiter}, "
+            f"posted_date= {self.posted_date}, "
+            f"permalink= {self.permalink})"
         )

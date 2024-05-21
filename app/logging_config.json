@@ -1,0 +1,51 @@
+{
+    "version": 1,
+    "disable_existing_loggers": false,
+    "formatters": {
+        "standard": {
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        },
+        "detailed": {
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(filename)s:%(funcName)s:%(lineno)d - %(message)s"
+        }
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "level": "WARNING",
+            "formatter": "standard",
+            "stream": "ext://sys.stdout"
+        },
+        "file": {
+            "class": "logging.FileHandler",
+            "level": "DEBUG",
+            "formatter": "detailed",
+            "filename": "../logs/app.log",
+            "mode": "a",
+            "encoding": "utf-8"
+        }
+    },
+    "loggers": {
+        "": {
+            "level": "DEBUG",
+            "handlers": [
+                "console",
+                "file"
+            ]
+        },
+        "sqlalchemy.engine": {
+            "handlers": [
+                "console"
+            ],
+            "level": "WARNING",
+            "propagate": false
+        },
+        "sqlalchemy.pool": {
+            "handlers": [
+                "console"
+            ],
+            "level": "WARNING",
+            "propagate": false
+        }
+    }
+}
