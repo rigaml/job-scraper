@@ -1,8 +1,11 @@
+"""
+Utils to manipulate text.
+"""
 import re
 import hashlib
 
 
-def join_without_overlap(paragraph1: str, paragraph2: str) -> str:
+def join_without_overlap(text1: str, text2: str) -> str:
     """
     Joins two text paragraphs, resolving any overlap.
 
@@ -13,33 +16,33 @@ def join_without_overlap(paragraph1: str, paragraph2: str) -> str:
     Returns:
         str: The joined text with no overlap.
     """
-    if not paragraph1:
-        return paragraph2
-    if not paragraph2:
-        return paragraph1
+    if not text1:
+        return text2
+    if not text2:
+        return text1
 
-    len1 = len(paragraph1)
-    len2 = len(paragraph2)
+    len1 = len(text1)
+    len2 = len(text2)
 
     if len1 < 1:
-        return paragraph2
+        return text2
     if len2 < 1:
-        return paragraph1
+        return text1
 
     for i in range(len1):
         for j in range(len2):
             if i + j < len1 - 1:
-                if paragraph1[i+j] != paragraph2[j]:
+                if text1[i+j] != text2[j]:
                     break
             elif i + j == len1 - 1:
-                if paragraph1[i+j] != paragraph2[j]:
+                if text1[i+j] != text2[j]:
                     break
-                else:
-                    return paragraph1 + paragraph2[j+1:]
+
+                return text1 + text2[j+1:]
             else:
                 break
 
-    return paragraph1 + paragraph2
+    return text1 + text2
 
 
 def generate_hash_key(text: str):

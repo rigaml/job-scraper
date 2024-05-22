@@ -1,9 +1,11 @@
 """
-Contains the information scraped from the website.
+Job scraped from the website.
 """
 
 
 class Job:
+    """Job fields"""
+
     def __init__(self):
         self.ref = ""
         self.title = ""

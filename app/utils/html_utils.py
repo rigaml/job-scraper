@@ -18,8 +18,8 @@ def find_element_text(doc: WebElement, selector: str) -> str:
     """
     try:
         return doc.find_element(By.CSS_SELECTOR, selector).text
-    except (NoSuchElementException):
+    except NoSuchElementException:
         return ""
-    except (StaleElementReferenceException):
+    except StaleElementReferenceException:
         time.sleep(1)
         return doc.find_element(By.CSS_SELECTOR, selector).text

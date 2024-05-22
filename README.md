@@ -91,7 +91,8 @@ NOTE: After few days not accessing Jobserve with this session id, it will expire
 
 ## Limitations and Future Improvements
 
-Application to set particular values in the Search form to avoid having to deal with the expired session id.
+- Add web interface to extract insights from the database.
+- Application to set particular values in the Search form to avoid having to deal with the expired session id.
 
 ## License
 
