@@ -1,6 +1,7 @@
 """
 Abstract class that defines common methods that scrapers for different jobs sites should implement.
 """
+
 from abc import ABC, abstractmethod
 from typing import List
 

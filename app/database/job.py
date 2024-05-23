@@ -1,6 +1,7 @@
 """
 Defines a job table.
 """
+
 from datetime import datetime
 from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy import func as sql_func
@@ -29,9 +30,7 @@ class Job(Base):
     hash_key: Mapped[str]
     created_at: Mapped[datetime] = mapped_column(server_default=sql_func.now())
 
-    __table_args__ = (
-        UniqueConstraint("jobs_site_id", "hash_key"),
-    )
+    __table_args__ = (UniqueConstraint("jobs_site_id", "hash_key"),)
 
     jobs_site = relationship("JobsSite", back_populates="jobs")
 

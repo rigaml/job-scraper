@@ -2,6 +2,7 @@
 Jobs site repository
 Identifies a source of jobs to scrape.
 """
+
 from typing import Callable, ContextManager, Optional
 from sqlalchemy.orm import Session
 

@@ -4,6 +4,7 @@ Script to initialize an empty database
 File should have import of table definitions on top for SQLAlchemy 
 to be able to create the tables. That is import database.job, import database.jobs_site...
 """
+
 import os
 import sys
 import utils.file_utils as fu
@@ -17,10 +18,9 @@ from database.jobs_site_repository import JobsSiteRepository
 
 if __name__ == "__main__":
 
-    absolute_path_database = fu.get_absolute_path_file(settings.JOBS_DATABASE_PATH_NAME)
+    absolute_path_database = fu.get_absolute_path_in_parent(settings.JOBS_DATABASE_PATH_NAME)
     if os.path.exists(absolute_path_database):
-        print((f"Database already exist at: {absolute_path_database}."
-               "Remove if want to create an empty one."))
+        print((f"Database already exist at: {absolute_path_database}." "Remove if want to create an empty one."))
         sys.exit()
 
     jobs_db = db.Database(f"sqlite:///{absolute_path_database}")

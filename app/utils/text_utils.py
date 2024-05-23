@@ -1,6 +1,7 @@
 """
 Utils to manipulate text.
 """
+
 import re
 import hashlib
 
@@ -32,13 +33,13 @@ def join_without_overlap(text1: str, text2: str) -> str:
     for i in range(len1):
         for j in range(len2):
             if i + j < len1 - 1:
-                if text1[i+j] != text2[j]:
+                if text1[i + j] != text2[j]:
                     break
             elif i + j == len1 - 1:
-                if text1[i+j] != text2[j]:
+                if text1[i + j] != text2[j]:
                     break
 
-                return text1 + text2[j+1:]
+                return text1 + text2[j + 1:]
             else:
                 break
 
@@ -56,8 +57,8 @@ def generate_hash_key(text: str):
         str: An 8-character string representing the short identifier for the input text.
     """
 
-    text_cleaned = re.sub(r'\s+', '', text)
-    text_bytes = text_cleaned.encode('utf-8')
+    text_cleaned = re.sub(r"\s+", "", text)
+    text_bytes = text_cleaned.encode("utf-8")
     sha256_hash = hashlib.sha256(text_bytes).hexdigest()
     short_id = sha256_hash[:8]
 

@@ -3,6 +3,7 @@ Scrapes jobs from the specified jobs site and stores them in the database.
     +Jobs database should exist in: ../data/job-scrape.db  (to create a new one use 'app/scripts/create_database.py')
     +Logs folder should exist in: ../logs
 """
+
 import json
 import os
 import sys
@@ -32,9 +33,9 @@ def init_logger():
 logger = init_logger()
 
 
-def load_logging_config(config_path='logging_config.json'):
+def load_logging_config(config_path="logging_config.json"):
     """Load logging configuration from a JSON file."""
-    with open(config_path, 'r', encoding='utf-8') as f:
+    with open(config_path, "r", encoding="utf-8") as f:
         config = json.load(f)
         logging.config.dictConfig(config)
 
@@ -88,7 +89,7 @@ def store_jobs(job: Job, jobs_site_id: int, job_repo: JobRepository):
 
 def setup_database():
     """Setup and return the database connection and repositories."""
-    absolute_path_database = fu.get_absolute_path_file(settings.JOBS_DATABASE_PATH_NAME)
+    absolute_path_database = fu.get_absolute_path_in_parent(settings.JOBS_DATABASE_PATH_NAME)
     if not os.path.exists(absolute_path_database):
         logger.error("Database doesn't exist at location: %s", absolute_path_database)
         sys.exit()

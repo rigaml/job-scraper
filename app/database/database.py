@@ -1,6 +1,7 @@
 """
 Databases base class.
 """
+
 from contextlib import contextmanager
 from typing import Generator
 import logging

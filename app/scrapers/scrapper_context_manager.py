@@ -6,7 +6,7 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-class ScrapperContextManager():
+class ScrapperContextManager:
     """
     A context manager for setting up and managing a web scraping session.
 
@@ -31,7 +31,7 @@ class ScrapperContextManager():
 
         Args:
             url (str): The URL to navigate.
-            show_browser (bool): Whether to show the Chrome browser window (True) or run in headless mode (False). 
+            show_browser (bool): Whether to show the Chrome browser window (True) or run in headless mode (False).
             Keep in mind that to show the browser(True), environment that runs the application should have a graphical interface.
         """
         self.url = url
@@ -45,12 +45,14 @@ class ScrapperContextManager():
         if not self.show_browser:
             # Runs Chrome in headless mode.
             chrome_options.add_argument("--headless")
-            chrome_options.add_argument("--window-size=2560,1080")
-            chrome_options.add_argument("--enable-javascript")
-            chrome_options.add_argument("--disable-gpu")
+            # Options used to troubleshot scraping issues. Avoid in general as can compromise security
+            # chrome_options.add_argument("--disable-gpu")
             # chrome_options.add_argument("--no-sandbox")
             # chrome_options.add_argument("--disable-dev-shm-usage")
             # service = Service("/usr/bin/chromedriver")
+
+        chrome_options.add_argument("--window-size=1024,768")
+        chrome_options.add_argument("--enable-javascript")
 
         service = Service(ChromeDriverManager().install())
         self.driver = webdriver.Chrome(service=service, options=chrome_options)

@@ -1,6 +1,7 @@
 """
 Defines a jobs site.
 """
+
 from datetime import datetime
 from sqlalchemy import String, Boolean
 from sqlalchemy import func as sql_func

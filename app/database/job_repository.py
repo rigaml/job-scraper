@@ -1,6 +1,7 @@
 """
 Jobs repository
 """
+
 from typing import Callable, ContextManager, List, Optional
 from sqlalchemy import and_
 from sqlalchemy.orm import Session

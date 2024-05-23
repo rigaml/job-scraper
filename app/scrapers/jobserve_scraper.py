@@ -1,4 +1,5 @@
 """Scraper for Jobserve website"""
+
 import logging
 import time
 from typing import List, Optional
@@ -24,23 +25,23 @@ class JobserveScraper(JobsScraper):
     _SITE_NAME = "jobserve"
     _JOBS_URL = "https://www.jobserve.com/gb/en/JobSearch.aspx?shid="
     # Selector list of offers
-    _SEL_JOB_LIST = '#jsJobResContent .jobItem'
+    _SEL_JOB_LIST = "#jsJobResContent .jobItem"
     # Selectors fields for each item in the list of offers
-    _SEL_JOB_ITEM_TITLE = '.jobResultsTitle'
-    _SEL_JOB_ITEM_SALARY = '.jobResultsSalary'
-    _SEL_JOB_ITEM_LOC = '.jobResultsLoc'
-    _SEL_JOB_ITEM_TYPE = '.jobResultsType'
+    _SEL_JOB_ITEM_TITLE = ".jobResultsTitle"
+    _SEL_JOB_ITEM_SALARY = ".jobResultsSalary"
+    _SEL_JOB_ITEM_LOC = ".jobResultsLoc"
+    _SEL_JOB_ITEM_TYPE = ".jobResultsType"
     # Selector job details container
     _SEL_JOB_DETAIL_CONTAINER = "#JobDetailContainer .jsCustomScrollContainer"
     # Job details description
-    _SEL_JOB_DETAIL_SKILLS = '#md_skills'
-    _SEL_JOB_DETAIL_DURATION = '#md_duration'
-    _SEL_JOB_DETAIL_START_DATE = '#md_start_date'
-    _SEL_JOB_DETAIL_RATE = '#md_rate'
-    _SEL_JOB_DETAIL_RECRUITER = '#md_recruiter'
-    _SEL_JOB_DETAIL_REF = '#md_ref'
-    _SEL_JOB_DETAIL_POSTED_DATE = '#md_posted_date'
-    _SEL_JOB_DETAIL_PERMALINK = '#md_permalink'
+    _SEL_JOB_DETAIL_SKILLS = "#md_skills"
+    _SEL_JOB_DETAIL_DURATION = "#md_duration"
+    _SEL_JOB_DETAIL_START_DATE = "#md_start_date"
+    _SEL_JOB_DETAIL_RATE = "#md_rate"
+    _SEL_JOB_DETAIL_RECRUITER = "#md_recruiter"
+    _SEL_JOB_DETAIL_REF = "#md_ref"
+    _SEL_JOB_DETAIL_POSTED_DATE = "#md_posted_date"
+    _SEL_JOB_DETAIL_PERMALINK = "#md_permalink"
 
     def __init__(self, session_id, show_browser=False):
         self.jobs_url = self._JOBS_URL + session_id
@@ -70,12 +71,11 @@ class JobserveScraper(JobsScraper):
         """Retrieve job items from the listing page. Returns a maximum of 'retrieve_jobs_max' items."""
         try:
             job_items = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_all_elements_located((By.CSS_SELECTOR, self._SEL_JOB_LIST))
-            )
+                EC.presence_of_all_elements_located((By.CSS_SELECTOR, self._SEL_JOB_LIST)))
 
             logger.debug("Job items found: %s and max required: %s", len(job_items), max_jobs_retrieve)
 
-            return job_items[:min(len(job_items), max_jobs_retrieve)]
+            return job_items[: min(len(job_items), max_jobs_retrieve)]
         except Exception as e:
             logger.error("Error retrieving job items: %s", e)
             return []
@@ -105,9 +105,7 @@ class JobserveScraper(JobsScraper):
     def _get_job_detail_container(self) -> Optional[WebElement]:
         """Retrieve the job detail container element."""
         try:
-            return WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, self._SEL_JOB_DETAIL_CONTAINER))
-            )
+            return WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, self._SEL_JOB_DETAIL_CONTAINER)))
         except Exception as e:
             logger.error("Error retrieving job detail container: %s", e)
             return None
@@ -130,17 +128,21 @@ class JobserveScraper(JobsScraper):
                 job.duration = text_utils.join_without_overlap(
                     job.duration, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_DURATION))
                 job.start_date = text_utils.join_without_overlap(
-                    job.start_date, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_START_DATE))
+                    job.start_date, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_START_DATE)
+                )
                 job.rate = text_utils.join_without_overlap(
                     job.rate, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_RATE))
                 job.recruiter = text_utils.join_without_overlap(
-                    job.recruiter, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_RECRUITER))
+                    job.recruiter, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_RECRUITER)
+                )
                 job.ref = text_utils.join_without_overlap(
                     job.ref, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_REF))
                 job.posted_date = text_utils.join_without_overlap(
-                    job.posted_date, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_POSTED_DATE))
+                    job.posted_date, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_POSTED_DATE)
+                )
                 job.permalink = text_utils.join_without_overlap(
-                    job.permalink, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_PERMALINK))
+                    job.permalink, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_PERMALINK)
+                )
 
         except Exception as e:
             logger.error("Error during scrolling and extracting details: %s", e)
