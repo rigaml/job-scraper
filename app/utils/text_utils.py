@@ -1,7 +1,6 @@
 """
 Utils to manipulate text.
 """
-
 import re
 import hashlib
 
@@ -33,10 +32,10 @@ def join_without_overlap(text1: str, text2: str) -> str:
     for i in range(len1):
         for j in range(len2):
             if i + j < len1 - 1:
-                if text1[i + j] != text2[j]:
+                if text1[i+j] != text2[j]:
                     break
             elif i + j == len1 - 1:
-                if text1[i + j] != text2[j]:
+                if text1[i+j] != text2[j]:
                     break
 
                 return text1 + text2[j + 1:]
