@@ -1,4 +1,3 @@
-from typing import Optional
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -45,14 +44,16 @@ class ScrapperContextManager:
         if not self.show_browser:
             # Runs Chrome in headless mode.
             chrome_options.add_argument("--headless")
+            chrome_options.add_argument("--enable-javascript")
             # Options used to troubleshot scraping issues. Avoid in general as can compromise security
             # chrome_options.add_argument("--disable-gpu")
             # chrome_options.add_argument("--no-sandbox")
             # chrome_options.add_argument("--disable-dev-shm-usage")
             # service = Service("/usr/bin/chromedriver")
 
-        chrome_options.add_argument("--window-size=1024,768")
-        chrome_options.add_argument("--enable-javascript")
+        # Can not get all content when smaller size
+        chrome_options.add_argument("--window-size=2560,1440")
+        # chrome_options.add_argument("--window-size=1024,768")
 
         service = Service(ChromeDriverManager().install())
         self.driver = webdriver.Chrome(service=service, options=chrome_options)

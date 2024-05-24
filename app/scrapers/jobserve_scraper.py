@@ -113,16 +113,10 @@ class JobserveScraper(JobsScraper):
     def _scroll_and_extract_details(self, container: WebElement, job: Job):
         """Scroll through the job details container and extract the details."""
         try:
-            scroll_height = self.driver.execute_script("return arguments[0].scrollHeight;", container)
-            logger.debug("Scrolling height: %s", scroll_height)
-
-            current_scroll_position = 0
             pixels_scroll = 100
-            while current_scroll_position < scroll_height:
-                self.driver.execute_script(f"arguments[0].scrollTop = {current_scroll_position};", container)
-                current_scroll_position += pixels_scroll
-                time.sleep(1)
+            client_height = self.driver.execute_script("return arguments[0].clientHeight;", container)
 
+            while True:
                 job.skills = text_utils.join_without_overlap(
                     job.skills, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_SKILLS))
                 job.duration = text_utils.join_without_overlap(
@@ -143,6 +137,15 @@ class JobserveScraper(JobsScraper):
                 job.permalink = text_utils.join_without_overlap(
                     job.permalink, html_utils.find_element_text(container, self._SEL_JOB_DETAIL_PERMALINK)
                 )
+
+                self.driver.execute_script(f"arguments[0].scrollTop += {pixels_scroll};", container)
+                time.sleep(1)
+
+                current_scroll_position = self.driver.execute_script("return arguments[0].scrollTop;", container)
+                new_scroll_height = self.driver.execute_script("return arguments[0].scrollHeight;", container)
+                logger.debug("Scroll position/height: %s/%s", current_scroll_position, new_scroll_height)
+                if current_scroll_position + client_height >= new_scroll_height:
+                    break
 
         except Exception as e:
             logger.error("Error during scrolling and extracting details: %s", e)
