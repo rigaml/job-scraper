@@ -13,10 +13,14 @@ class JobsScraper(ScrapperContextManager, ABC):
 
     @abstractmethod
     def get_site_name(self) -> str:
-        """Returns the name of the site this class is scraping jobs from."""
+        """
+        Returns the name of the site this class is scraping jobs from.
+        """
         pass
 
     @abstractmethod
     def scrape(self, retrieve_jobs_max: int) -> List[Job]:
-        """Implement method to scrape jobs"""
+        """
+        Implement method to scrape jobs
+        """
         pass

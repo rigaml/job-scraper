@@ -16,7 +16,9 @@ Base = declarative_base()
 
 
 class Database:
-    """Base class to help manage database connection and session creation for SQLAlchemy."""
+    """
+    Base class to help manage database connection and session creation for SQLAlchemy.
+    """
 
     def __init__(self, db_url: str) -> None:
         """Initializes the database connection using the provided URL."""
@@ -39,7 +41,9 @@ class Database:
 
     @contextmanager
     def session(self) -> Generator[Session, None, None]:
-        """Provides a context manager for creating database sessions."""
+        """
+        Provides a context manager for creating database sessions.
+        """
         session: Session = self._session_factory()
         try:
             yield session

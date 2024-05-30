@@ -20,7 +20,9 @@ logger = logging.getLogger(__name__)
 
 
 class JobserveScraper(JobsScraper):
-    """Extract jobs from Jobserve"""
+    """
+    Extract jobs from Jobserve
+    """
 
     _SITE_NAME = "jobserve"
     _JOBS_URL = "https://www.jobserve.com/gb/en/JobSearch.aspx?shid="
@@ -48,12 +50,16 @@ class JobserveScraper(JobsScraper):
         super().__init__(self.jobs_url, show_browser)
 
     def get_site_name(self) -> str:
-        """Returns the site name this class scrapes"""
+        """
+        Returns the site name this class scrapes
+        """
 
         return self._SITE_NAME
 
     def scrape(self, max_jobs_retrieve: int) -> List[Job]:
-        """Scrape job listings returning list of Job objects."""
+        """
+        Scrape job listings returning list of Job objects.
+        """
 
         job_items = self._get_job_items(max_jobs_retrieve)
 
@@ -68,7 +74,9 @@ class JobserveScraper(JobsScraper):
         return retrieved_jobs
 
     def _get_job_items(self, max_jobs_retrieve: int) -> List[WebElement]:
-        """Retrieve job items from the listing page. Returns a maximum of 'retrieve_jobs_max' items."""
+        """
+        Retrieve job items from the listing page. Returns a maximum of 'retrieve_jobs_max' items.
+        """
         try:
             job_items = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_all_elements_located((By.CSS_SELECTOR, self._SEL_JOB_LIST)))
@@ -81,7 +89,9 @@ class JobserveScraper(JobsScraper):
             return []
 
     def _click_job_item(self, job_element: WebElement):
-        """Click on a job item to load its details."""
+        """
+        Click on a job item to load its details.
+        """
         try:
             ActionChains(self.driver).move_to_element(job_element).click(job_element).perform()
             time.sleep(2)
@@ -89,7 +99,9 @@ class JobserveScraper(JobsScraper):
             logger.error("Error clicking on job item: %s", e)
 
     def _extract_job_details(self, job_element: WebElement) -> Job:
-        """Extract job details from a job item."""
+        """
+        Extract job details from a job item.
+        """
         job = Job()
         job.title = html_utils.find_element_text(job_element, self._SEL_JOB_ITEM_TITLE)
         job.salary = html_utils.find_element_text(job_element, self._SEL_JOB_ITEM_SALARY)
@@ -103,7 +115,9 @@ class JobserveScraper(JobsScraper):
         return job
 
     def _get_job_detail_container(self) -> Optional[WebElement]:
-        """Retrieve the job detail container element."""
+        """
+        Retrieve the job detail container element.
+        """
         try:
             return WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, self._SEL_JOB_DETAIL_CONTAINER)))
         except Exception as e:
@@ -111,7 +125,9 @@ class JobserveScraper(JobsScraper):
             return None
 
     def _scroll_and_extract_details(self, container: WebElement, job: Job):
-        """Scroll through the job details container and extract the details."""
+        """
+        Scroll through the job details container and extract the details.
+        """
         try:
             pixels_scroll = 100
             client_height = self.driver.execute_script("return arguments[0].clientHeight;", container)

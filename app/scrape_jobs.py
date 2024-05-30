@@ -26,7 +26,9 @@ import utils.text_utils as tu
 
 
 def init_logger():
-    """Initialize and return the module logger."""
+    """
+    Initialize and return the module logger.
+    """
     return logging.getLogger(__name__)
 
 
@@ -34,14 +36,18 @@ logger = init_logger()
 
 
 def load_logging_config(config_path="logging_config.json"):
-    """Load logging configuration from a JSON file."""
+    """
+    Load logging configuration from a JSON file.
+    """
     with open(config_path, "r", encoding="utf-8") as f:
         config = json.load(f)
         logging.config.dictConfig(config)
 
 
 def scrape_jobs(scraper: JobsScraper, jobs_site_id: int, job_repo: JobRepository):
-    """Scrape jobs and store them in the repository."""
+    """
+    Scrape jobs and store them in the repository.
+    """
     with scraper as scraper_instance:
         try:
             web_jobs = scraper_instance.scrape(settings.SCRAPE_RETRIEVE_MAX)
@@ -57,7 +63,9 @@ def scrape_jobs(scraper: JobsScraper, jobs_site_id: int, job_repo: JobRepository
 
 
 def store_jobs(job: Job, jobs_site_id: int, job_repo: JobRepository):
-    """Stores the job in the repository."""
+    """
+    Stores the job in the repository.
+    """
     if not job.skills:
         logger.error("Could not retrieve skills from job site: %s", job)
         return
@@ -88,7 +96,9 @@ def store_jobs(job: Job, jobs_site_id: int, job_repo: JobRepository):
 
 
 def setup_database():
-    """Setup and return the database connection and repositories."""
+    """
+    Setup and return the database connection and repositories.
+    """
     absolute_path_database = fu.get_absolute_path_in_parent(settings.JOBS_DATABASE_PATH_NAME)
     if not os.path.exists(absolute_path_database):
         logger.error("Database doesn't exist at location: %s", absolute_path_database)
@@ -102,7 +112,9 @@ def setup_database():
 
 
 def main():
-    """Main function to run the job scraper."""
+    """
+    Main function to run the job scraper.
+    """
     load_logging_config()
 
     jobs_site_repo, job_repository = setup_database()

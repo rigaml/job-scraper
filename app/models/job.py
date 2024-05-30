@@ -4,7 +4,9 @@ Job scraped from the website.
 
 
 class Job:
-    """Job fields"""
+    """
+    Job fields
+    """
 
     def __init__(self):
         self.ref = ""
