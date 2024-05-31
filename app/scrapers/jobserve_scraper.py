@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 
 from scrapers.jobs_scraper import JobsScraper
-from app.services.job_dto import JobDTO
+from services.job_dto import JobDTO
 
 import utils.text_utils as text_utils
 import utils.html_utils as html_utils
