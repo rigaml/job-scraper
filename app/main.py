@@ -8,7 +8,7 @@ from api.job_response import JobResponse
 from services.job_dto import JobDTO
 from services.jobs_service import JobsService
 
-app = FastAPI()
+app = FastAPI(swagger_ui_parameters={"tryItOutEnabled": True})
 
 
 @app.get("/")
