@@ -19,7 +19,7 @@ class JobsSite(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(server_default=sql_func.now())
 
-    # Optional: Define the relationship to User
+    # Define the relationship to Job
     jobs = relationship("Job", back_populates="jobs_site")
 
     def __repr__(self):

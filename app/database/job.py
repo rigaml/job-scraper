@@ -32,6 +32,7 @@ class Job(Base):
 
     __table_args__ = (UniqueConstraint("jobs_site_id", "hash_key"),)
 
+    # Define the relationship to JobsSite
     jobs_site = relationship("JobsSite", back_populates="jobs")
 
     def __str__(self):

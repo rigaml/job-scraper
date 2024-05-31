@@ -3,7 +3,7 @@ Jobs site repository
 Identifies a source of jobs to scrape.
 """
 
-from typing import Callable, ContextManager, Optional
+from typing import Callable, ContextManager, Optional, List
 from sqlalchemy.orm import Session
 
 from database.jobs_site import JobsSite
@@ -17,6 +17,10 @@ class JobsSiteRepository:
     def get_by_name(self, site_name: str) -> Optional[JobsSite]:
         with self.session_factory() as session:
             return session.query(JobsSite).filter(JobsSite.site_name == site_name).one_or_none()
+
+    def get_jobs_sites(self, skip: int = 0, limit: int = 0) -> List[JobsSite]:
+        with self.session_factory() as session:
+            return session.query(JobsSite).offset(skip).limit(limit).all()
 
     def add(self, site_name: str, url: str, is_active: bool = True) -> JobsSite:
         jobs_site = JobsSite(site_name=site_name, url=url, is_active=is_active)

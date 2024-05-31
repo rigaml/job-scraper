@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 
 from scrapers.jobs_scraper import JobsScraper
-from models.job import Job
+from app.services.job_dto import JobDTO
 
 import utils.text_utils as text_utils
 import utils.html_utils as html_utils
@@ -56,7 +56,7 @@ class JobserveScraper(JobsScraper):
 
         return self._SITE_NAME
 
-    def scrape(self, max_jobs_retrieve: int) -> List[Job]:
+    def scrape(self, max_jobs_retrieve: int) -> List[JobDTO]:
         """
         Scrape job listings returning list of Job objects.
         """
@@ -98,11 +98,11 @@ class JobserveScraper(JobsScraper):
         except Exception as e:
             logger.error("Error clicking on job item: %s", e)
 
-    def _extract_job_details(self, job_element: WebElement) -> Job:
+    def _extract_job_details(self, job_element: WebElement) -> JobDTO:
         """
         Extract job details from a job item.
         """
-        job = Job()
+        job = JobDTO()
         job.title = html_utils.find_element_text(job_element, self._SEL_JOB_ITEM_TITLE)
         job.salary = html_utils.find_element_text(job_element, self._SEL_JOB_ITEM_SALARY)
         job.loc = html_utils.find_element_text(job_element, self._SEL_JOB_ITEM_LOC)
@@ -124,7 +124,7 @@ class JobserveScraper(JobsScraper):
             logger.error("Error retrieving job detail container: %s", e)
             return None
 
-    def _scroll_and_extract_details(self, container: WebElement, job: Job):
+    def _scroll_and_extract_details(self, container: WebElement, job: JobDTO):
         """
         Scroll through the job details container and extract the details.
         """

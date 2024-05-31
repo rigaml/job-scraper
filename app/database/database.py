@@ -21,14 +21,19 @@ class Database:
     """
 
     def __init__(self, db_url: str) -> None:
-        """Initializes the database connection using the provided URL."""
-        self._engine = create_engine(db_url)
+        """
+        Initializes the database connection using the provided URL.
+        """
+        self._engine = create_engine(
+            db_url,
+            # Avoid exceptions when FastAPI accesses SQLite connections from different threads (still you need to control concurrency)
+            connect_args={"check_same_thread": False})
         self._session_factory = orm.scoped_session(
-            orm.sessionmaker(
-                autocommit=False,
-                autoflush=False,
-                bind=self._engine,
-            ),
+                orm.sessionmaker(
+                    autocommit=False,
+                    autoflush=False,
+                    bind=self._engine,
+                ),
         )
 
     def create_database(self) -> None:
