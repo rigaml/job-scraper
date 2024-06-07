@@ -6,7 +6,7 @@ Identifies a source of jobs to scrape.
 from typing import Callable, ContextManager, Optional, List
 from sqlalchemy.orm import Session
 
-from database.jobs_site import JobsSite
+from app.database.jobs_site import JobsSite
 
 
 class JobsSiteRepository:

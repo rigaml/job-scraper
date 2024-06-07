@@ -3,7 +3,7 @@ Job scraped from the website.
 """
 
 
-from database.job import Job
+from app.database.job import Job
 
 
 class JobDTO:

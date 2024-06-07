@@ -7,7 +7,7 @@ from sqlalchemy import String, Boolean
 from sqlalchemy import func as sql_func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from database.database import Base
+from app.database.database import Base
 
 
 class JobsSite(Base):

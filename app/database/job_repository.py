@@ -2,17 +2,33 @@
 Jobs repository
 """
 
-from typing import Callable, ContextManager, List, Optional
+from abc import ABC, abstractmethod
+from typing import List, Optional
+from injector import inject
 from sqlalchemy import and_
-from sqlalchemy.orm import Session
 
-from database.job import Job
+from app.database.database import Database
+from app.database.job import Job
 
+class JobRepositoryBase(ABC):
+
+    @abstractmethod
+    def get_by_hash_key(self, jobs_site_id: int, hash_key: str) -> Optional[Job]:
+        pass
+
+    @abstractmethod
+    def get_jobs(self, skip: int = 0, limit: int = 0) -> List[Job]:
+        pass
+
+    @abstractmethod
+    def add(self, job: Job) -> Job:
+        pass
 
 class JobRepository:
 
-    def __init__(self, session_factory: Callable[..., ContextManager[Session]]):
-        self.session_factory = session_factory
+    @inject
+    def __init__(self, database: Database):
+        self.session_factory = database.session
 
     def get_by_hash_key(self, jobs_site_id: int, hash_key: str) -> Optional[Job]:
         with self.session_factory() as session:

@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from services.job_dto import JobDTO
+from app.services.job_dto import JobDTO
 
 
 class JobResponse(BaseModel):
