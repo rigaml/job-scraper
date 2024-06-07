@@ -1,8 +1,10 @@
-fastapi
-sqlalchemy
 selenium
 webdriver-manager
+sqlalchemy
 pytest
 pytest-cov
 # 
+fastapi
+dependency-injector
+#
 scikit-learn

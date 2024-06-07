@@ -13,7 +13,7 @@ WHERE created_at > '2024-05-22';
 -- Deletes jobs inserted from a particular date.
 -- Remove the lines "BEGIN TRANSACTION" and "ROLLBACK" when you are sure want to execute statement.
 ----------------
-BEGIN DEFERRED TRANSACTION;
+BEGIN TRANSACTION;
 DELETE FROM job
 WHERE created_at > '2024-05-23';
 ROLLBACK;

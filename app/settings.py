@@ -15,7 +15,7 @@ SCRAPE_SITE = "jobserve"
 # Set SCRAPE_SHOW_BROWSER to True if want to see what the scapting process is doing.
 # Note for this to work the environment which runs the application should have a
 # graphical interface to execute Chrome browser
-SCRAPE_SHOW_BROWSER = True
+SCRAPE_SHOW_BROWSER = False
 
 # Maximum number of jobs retrieved from the targeted web page
 SCRAPE_RETRIEVE_MAX = 30
