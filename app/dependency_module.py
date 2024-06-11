@@ -10,6 +10,6 @@ class DependencyModule(Module):
         database_uri= "sqlite:///" + settings.JOBS_DATABASE_PATH_NAME
         db = Database(database_uri)
 
-        binder.bind(Database, to=db, scope=singleton)        
+        binder.bind(Database, to=db, scope=singleton)
         binder.bind(JobRepositoryBase, to=JobRepository, scope=singleton)
         binder.bind(JobsServiceBase, to=JobsService, scope=singleton)

@@ -15,6 +15,7 @@ See `requirements.txt` in the folder.
 ## Getting Started (Linux/Unix instructions)
 
 1. **Clone this repo from GitHub**
+
 Open a terminal window in repo's root folder and follow the steps below
 
 2. **Create a Python virtual in the folder that contains this repo:**
