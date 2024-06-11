@@ -20,13 +20,16 @@ class JobsSite(Base):
     created_at: Mapped[datetime] = mapped_column(server_default=sql_func.now())
 
     # Define the relationship to Job
-    jobs = relationship("Job", back_populates="jobs_site")
+    jobs = relationship("app.database.job.Job", back_populates="jobs_site")
 
     def __repr__(self):
         return (
-            f"JobsSite(id= {self.id}, "
+            f"JobsSite("
+            f"id= {self.id}, "
             f"site_name= {self.site_name}, "
             f"url= {self.url}, "
             f"is_active= {self.is_active}, "
-            f"created_at= {self.created_at})"
+            f"created_at= {self.created_at}"
+            ")"
         )
+    

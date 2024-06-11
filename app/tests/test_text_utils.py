@@ -1,5 +1,5 @@
 import pytest
-import utils.text_utils as text_utils
+import app.utils.text_utils as text_utils
 
 
 @pytest.mark.parametrize(

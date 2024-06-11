@@ -33,11 +33,12 @@ class Job(Base):
     __table_args__ = (UniqueConstraint("jobs_site_id", "hash_key"),)
 
     # Define the relationship to JobsSite
-    jobs_site = relationship("JobsSite", back_populates="jobs")
+    jobs_site = relationship("app.database.jobs_site.JobsSite", back_populates="jobs")
 
-    def __str__(self):
+    def __repr__(self):
         return (
-            f"Job(id= {self.id}, "
+            f"Job("
+            f"id= {self.id}, "
             f"jobs_site_id= {self.jobs_site_id}, "
             f"ref= {self.ref}, "
             f"title= {self.title}, "
@@ -52,5 +53,8 @@ class Job(Base):
             f"posted_date= {self.posted_date}, "
             f"permalink= {self.permalink}, "
             f"hash_key= {self.hash_key}, "
-            f"created_at= {self.created_at})"
+            f"created_at= {self.created_at}"
+            ")"
         )
+    
+

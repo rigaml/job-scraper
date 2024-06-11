@@ -3,16 +3,16 @@ Jobs site repository
 Identifies a source of jobs to scrape.
 """
 
-from typing import Callable, ContextManager, Optional, List
-from sqlalchemy.orm import Session
+from typing import Optional, List
 
+from app.database.database import Database
 from app.database.jobs_site import JobsSite
 
 
 class JobsSiteRepository:
 
-    def __init__(self, session_factory: Callable[..., ContextManager[Session]]):
-        self.session_factory = session_factory
+    def __init__(self, database: Database):
+        self.session_factory = database.session
 
     def get_by_name(self, site_name: str) -> Optional[JobsSite]:
         with self.session_factory() as session:

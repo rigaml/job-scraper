@@ -27,7 +27,7 @@ def get_secret(key: str):
     Raises:
         KeyError: If the provided key is not found in the configuration file.
     """
-    with open("./config.json", "r", encoding="utf-8") as config_file:
+    with open("./app/config.json", "r", encoding="utf-8") as config_file:
         config = json.load(config_file)
         secret_value = config[f"{key}"]
     return secret_value

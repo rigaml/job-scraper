@@ -5,8 +5,8 @@ Abstract class that defines common methods that scrapers for different jobs site
 from abc import ABC, abstractmethod
 from typing import List
 
-from database.job import Job
-from scrapers.scrapper_context_manager import ScrapperContextManager
+from app.database.job import Job
+from app.scrapers.scrapper_context_manager import ScrapperContextManager
 
 
 class JobsScraper(ScrapperContextManager, ABC):

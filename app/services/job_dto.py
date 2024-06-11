@@ -38,22 +38,25 @@ class JobDTO:
         self.permalink = permalink
 
     @classmethod
-    def create_from_db(cls, job: Job):
-        return cls(job.ref, job.title, job.salary, job.location, job.title, job.skills, job.duration,
+    def create_from_db(cls, job: Job) -> 'JobDTO':
+        return cls(job.ref, job.title, job.salary, job.location, job.type, job.skills, job.duration,
                    job.start_date, job.rate, job.recruiter, job.posted_date, job.permalink)
 
-    def __str__(self):
+    def __repr__(self):
         return (
-            f"Job(ref= {self.ref}, "
-            f"title= {self.title}, "
-            f"salary= {self.salary}, "
-            f"loc= {self.loc}, "
-            f"type= {self.type}, "
-            f"skills= {self.skills}, "
-            f"duration= {self.duration}, "
-            f"start_date= {self.start_date}, "
-            f"rate= {self.rate}, "
-            f"recruiter= {self.recruiter}, "
-            f"posted_date= {self.posted_date}, "
-            f"permalink= {self.permalink})"
+            f"JobDTO("
+            f"ref='{self.ref}', "
+            f"title='{self.title}', "
+            f"salary='{self.salary}', "
+            f"loc='{self.loc}', "
+            f"type='{self.type}', "
+            f"skills='{self.skills}', "
+            f"duration='{self.duration}', "
+            f"start_date='{self.start_date}', "
+            f"rate='{self.rate}', "
+            f"recruiter='{self.recruiter}', "
+            f"posted_date='{self.posted_date}', "
+            f"permalink='{self.permalink}'"
+            ")"
         )
+

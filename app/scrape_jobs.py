@@ -5,23 +5,24 @@ Scrapes jobs from the specified jobs site and stores them in the database.
 """
 
 import json
-import os
 import sys
 import time
 import logging
 import logging.config
 
-import settings
+from injector import Injector
 
-from scrapers.jobs_scraper import JobsScraper
-from scrapers.jobserve_scraper import JobserveScraper
+import app.settings as settings
+from app.dependency_module import DependencyModule
 
-import database.database as db
-from database.job import Job
-from database.job_repository import JobRepository
-from database.jobs_site_repository import JobsSiteRepository
+from app.scrapers.jobs_scraper import JobsScraper
+from app.scrapers.jobserve_scraper import JobserveScraper
 
-import utils.file_utils as fu
+from app.database.database import Database
+from app.database.job import Job
+from app.database.job_repository import JobRepository
+from app.database.jobs_site_repository import JobsSiteRepository
+
 import utils.text_utils as tu
 
 
@@ -35,7 +36,7 @@ def init_logger():
 logger = init_logger()
 
 
-def load_logging_config(config_path="logging_config.json"):
+def load_logging_config(config_path="app/logging_config.json"):
     """
     Load logging configuration from a JSON file.
     """
@@ -95,18 +96,12 @@ def store_jobs(job: Job, jobs_site_id: int, job_repo: JobRepository):
         job_repo.add(db_job)
 
 
-def setup_database():
+def setup_database(jobs_db: Database):
     """
     Setup and return the database connection and repositories.
     """
-    absolute_path_database = fu.get_absolute_path_in_parent(settings.JOBS_DATABASE_PATH_NAME)
-    if not os.path.exists(absolute_path_database):
-        logger.error("Database doesn't exist at location: %s", absolute_path_database)
-        sys.exit()
-
-    jobs_db = db.Database(f"sqlite:///{absolute_path_database}")
-    jobs_site_repo = JobsSiteRepository(jobs_db.session)
-    job_repository = JobRepository(jobs_db.session)
+    jobs_site_repo = JobsSiteRepository(jobs_db)
+    job_repository = JobRepository(jobs_db)
 
     return jobs_site_repo, job_repository
 
@@ -117,7 +112,9 @@ def main():
     """
     load_logging_config()
 
-    jobs_site_repo, job_repository = setup_database()
+    injector = Injector([DependencyModule()])
+
+    jobs_site_repo, job_repository = setup_database(injector.get(Database))
 
     jobs_site = jobs_site_repo.get_by_name(settings.SCRAPE_SITE)
     if not jobs_site:

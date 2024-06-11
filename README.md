@@ -14,7 +14,9 @@ See `requirements.txt` in the folder.
 
 ## Getting Started (Linux/Unix instructions)
 
-1. **Clone this repo from GitHub:**
+1. **Clone this repo from GitHub**
+Open a terminal window in repo's root folder and follow the steps below
+
 2. **Create a Python virtual in the folder that contains this repo:**
 
 ```bash
@@ -33,34 +35,42 @@ See `requirements.txt` in the folder.
     pip install --no-cache-dir --upgrade -r requirements.txt
 ```
 
-5. **Navigate to the application folder:**
-
-```bash
-    cd app
-```
-
-6. **Set the PYTHONPATH environment variable:**
+5. **Set the PYTHONPATH environment variable:**
 
 ```bash
     export PYTHONPATH="./"
 ```
 
-7. **First time database setup: create SQLite database to store the jobs:**
+6. **First time database setup: create SQLite database to store the jobs:**
 
 ```bash
-    python scripts/create_database.py
+    python app/scripts/create_database.py
 ```
 
-8. **Create a directory to store logs:**
+7. **Create a directory to store logs:**
 
 ```bash
-    mkdir ../logs
+    mkdir logs
 ```
 
-9. **Execute program to scrape jobs(first see "Set job search parameters"):**
+8. **Execute program to scrape jobs(first see "Set job search parameters"):**
 
 ```bash
-    python scrape_jobs.py
+    python app/scrape_jobs.py
+```
+
+### Start API for local development
+Open a terminal window in repo's root folder and start the API for local development
+
+```bash
+    fastapi dev app/main.py
+```
+Once it starts, open a browser window and enter `http://127.0.0.1:8000/docs` to try the endpoints on Swagger.
+
+### Unit test
+Open a terminal window in repo's root folder and execute
+```bash
+    pytest
 ```
 
 ### Set job search parameters:
@@ -82,7 +92,7 @@ If you are interested in a particular set of jobs to store in the database you c
 
 5. Rename `config-base.json` to `config.json` to this value is used by the application when querying.
 
-NOTE: After few days not accessing Jobserve with this session id, it will expire and you will need to repopulate the search as explained in previous steps.
+NOTE: After 2 days not accessing Jobserve with this session id, it will expire and you will need to repopulate the search as explained in previous steps.
 
 **Additional Notes**:
 

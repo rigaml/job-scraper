@@ -1,7 +1,7 @@
 import pytest
 
-from database.job import Job
-from services.job_dto import JobDTO
+from app.database.job import Job
+from app.services.job_dto import JobDTO
 
 
 def test_individual_fields():
@@ -24,7 +24,7 @@ def test_individual_fields():
 
 
 def test_create_from_db():
-    job = Job(ref="002", title="Data Scientist", salary="120000", location="San Francisco", job_type="Full-time",
+    job = Job(ref="002", title="Data Scientist", salary="120000", location="San Francisco", type="Full-time",
               skills="Python, Machine Learning", duration="Permanent", start_date="2024-07-01", rate="Annual",
               recruiter="Data Recruiter", posted_date="2024-05-31", permalink="http://example.com/job/002")
     job_dto = JobDTO.create_from_db(job)
