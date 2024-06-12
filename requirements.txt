@@ -1,10 +1,11 @@
 selenium
 webdriver-manager
 sqlalchemy
-pytest
-pytest-cov
-# 
 fastapi
 injector
-#
+# Data analysis
 scikit-learn
+# Tests
+pytest
+pytest-cov
+faker

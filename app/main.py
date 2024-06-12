@@ -29,12 +29,16 @@ def load_logging_config(config_path="app/logging_config.json"):
 load_logging_config() 
 logger = init_logger()
 
-app = FastAPI(title="Scrape Jobs API", swagger_ui_parameters={"tryItOutEnabled": True})
+app = FastAPI(
+    title="Scrape Jobs API", 
+    openapi_url="/scrape_jobs.json", 
+    swagger_ui_parameters={"tryItOutEnabled": True}
+)
 
 injector = Injector([DependencyModule()])
 
 @app.get("/")
-def health():
+async def health():
     return {"health_check": "OK"}
 
 @app.get("/jobs/", response_model=List[JobResponse])

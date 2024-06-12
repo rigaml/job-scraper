@@ -7,8 +7,7 @@ from typing import Generator
 import logging
 
 from sqlalchemy import create_engine, orm
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import declarative_base, Session
 
 logger = logging.getLogger(__name__)
 

@@ -9,7 +9,7 @@ class JobResponse(BaseModel):
     title: str = Field(default="")
     salary: str = Field(default="")
     loc: str = Field(default="")
-    type: str = Field(default="", alias='job_type')
+    type: str = Field(default="")
     skills: str = Field(default="")
     duration: str = Field(default="")
     start_date: str = Field(default="")
@@ -21,7 +21,7 @@ class JobResponse(BaseModel):
 
     @classmethod
     def create_from_dto(cls, job: JobDTO) -> 'JobResponse':
-        return cls(ref=job.ref, title=job.title, salary=job.salary, loc=job.loc, job_type=job.type, skills=job.skills, duration=job.duration,
+        return cls(ref=job.ref, title=job.title, salary=job.salary, loc=job.loc, type=job.type, skills=job.skills, duration=job.duration,
                    start_date=job.start_date, rate=job.rate, recruiter=job.recruiter, posted_date=job.posted_date, permalink=job.permalink)
 
     def __repr__(self):
