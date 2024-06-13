@@ -6,6 +6,7 @@ injector
 # Data analysis
 scikit-learn
 # Tests
+faker
 pytest
 pytest-cov
-faker
+pytest-pylint
