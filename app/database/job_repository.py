@@ -34,7 +34,7 @@ class JobRepository:
         with self.session_factory() as session:
             return session.query(Job).filter(and_(Job.jobs_site_id == jobs_site_id, Job.hash_key == hash_key)).one_or_none()
 
-    def get_jobs(self, skip: int = 0, limit: int = 0) -> List[Job]:
+    def get_jobs(self, skip: int = 0, limit: int = 10) -> List[Job]:
         with self.session_factory() as session:
             return session.query(Job).offset(skip).limit(limit).all()
 

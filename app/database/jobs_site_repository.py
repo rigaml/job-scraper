@@ -18,7 +18,7 @@ class JobsSiteRepository:
         with self.session_factory() as session:
             return session.query(JobsSite).filter(JobsSite.site_name == site_name).one_or_none()
 
-    def get_jobs_sites(self, skip: int = 0, limit: int = 0) -> List[JobsSite]:
+    def get_jobs_sites(self, skip: int = 0, limit: int = 10) -> List[JobsSite]:
         with self.session_factory() as session:
             return session.query(JobsSite).offset(skip).limit(limit).all()
 

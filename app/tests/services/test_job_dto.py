@@ -5,7 +5,7 @@ from app.services.job_dto import JobDTO
 
 
 def test_individual_fields():
-    job_dto = JobDTO(ref="001", title="Software Engineer", salary="100000", loc="New York", job_type="Full-time",
+    job_dto = JobDTO(ref="001", title="Software Engineer", salary="100000", loc="New York", type="Full-time",
                      skills="Python, Django", duration="Permanent", start_date="2024-06-01", rate="Hourly",
                      recruiter="Tech Recruiter", posted_date="2024-05-30", permalink="http://example.com/job/001")
 

@@ -8,7 +8,7 @@ Project extracts job posting from jobs sites and analizes the data.
 
 ## Prerequisites
 
-Python 3.6 or higher.
+Python 3.7+ (as it used @dataclass decorator).
 
 See `requirements.txt` in the folder.
 
