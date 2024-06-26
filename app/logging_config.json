@@ -21,7 +21,7 @@
             "level": "DEBUG",
             "formatter": "detailed",
             "filename": "logs/app.log",
-            "mode": "w",
+            "mode": "a",
             "encoding": "utf-8"
         }
     },
