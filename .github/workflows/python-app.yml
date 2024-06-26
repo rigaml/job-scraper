@@ -16,8 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3.7
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v3
         with:
+          node-version: '20'
           python-version: "3.7"
       - name: Install dependencies
         run: |
