@@ -5,6 +5,9 @@ from app.database.job import Job
 from app.scrapers.jobs_scraper import JobsScraper
 
 class TestJobsScraper(JobsScraper):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
     def get_site_name(self) -> str:
         return "TestSite"
     
