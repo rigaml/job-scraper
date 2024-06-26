@@ -2,6 +2,7 @@ selenium
 webdriver-manager
 sqlalchemy
 fastapi
+httpx
 injector
 # Load secrets from .env
 python-env
