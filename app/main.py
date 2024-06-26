@@ -42,7 +42,3 @@ def get_jobs(skip: int = 0, limit: int = 10)-> List[JobResponse]:
     jobs = jobs_service.get_jobs(skip, limit)
     response= [JobResponse.create_from_dto(job) for job in jobs]
     return response
-
-
-
-

@@ -3,6 +3,8 @@ webdriver-manager
 sqlalchemy
 fastapi
 injector
+# Load secrets from .env
+python-env
 # Data analysis
 scikit-learn
 # Tests
