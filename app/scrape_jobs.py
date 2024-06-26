@@ -26,23 +26,18 @@ from app.database.jobs_site_repository import JobsSiteRepository
 import utils.text_utils as tu
 
 
-def init_logger():
+def init_logger(config_path="app/logging_config.json"):
     """
     Initialize and return the module logger.
-    """
-    return logging.getLogger(__name__)
-
-
-logger = init_logger()
-
-
-def load_logging_config(config_path="app/logging_config.json"):
-    """
-    Load logging configuration from a JSON file.
     """
     with open(config_path, "r", encoding="utf-8") as f:
         config = json.load(f)
         logging.config.dictConfig(config)
+
+    return logging.getLogger(__name__)
+
+
+logger = init_logger()
 
 
 def scrape_jobs(scraper: JobsScraper, jobs_site_id: int, job_repo: JobRepository):
@@ -110,7 +105,6 @@ def main():
     """
     Main function to run the job scraper.
     """
-    load_logging_config()
 
     injector = Injector([DependencyModule()])
 

@@ -9,7 +9,6 @@ import os
 import sys
 
 import app.settings as settings
-import app.utils.file_utils as fu
 from app.database.database import Database
 
 from database.jobs_site_repository import JobsSiteRepository

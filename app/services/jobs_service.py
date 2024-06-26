@@ -18,6 +18,6 @@ class JobsService(JobsServiceBase):
     def __init__(self, job_repository: JobRepositoryBase):
         self._repository = job_repository
 
-    def get_jobs(self, skip: int = 0, limit: int = 0) -> List[JobDTO]:
+    def get_jobs(self, skip: int = 0, limit: int = 10) -> List[JobDTO]:
         jobs = self._repository.get_jobs(skip, limit)
         return [JobDTO.create_from_db(job) for job in jobs]

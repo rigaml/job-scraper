@@ -11,13 +11,10 @@ client = TestClient(app)
 
 @pytest.fixture()
 def mock_jobs_service():
-    # Create a mock of the JobsServiceBase
     jobs_service_mock = Mock(spec=JobsServiceBase)
     
-    # Define the mock's get_jobs method
     jobs_service_mock.get_jobs.return_value = generate_job_dtos(2)
     
-    # Override the injector's get method to return the mock
     injector.binder.bind(JobsServiceBase, to=jobs_service_mock, scope=None)
     
     return jobs_service_mock

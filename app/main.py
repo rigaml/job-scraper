@@ -11,22 +11,17 @@ from app.dependency_module import DependencyModule
 from app.services.jobs_service import JobsServiceBase
 from app.api.job_response import JobResponse
 
-def init_logger():
+def init_logger(config_path="app/logging_config.json"):
     """
     Initialize and return the module logger.
-    """
-    return logging.getLogger(__name__)
-
-
-def load_logging_config(config_path="app/logging_config.json"):
-    """
-    Load logging configuration from a JSON file.
     """
     with open(config_path, "r", encoding="utf-8") as f:
         config = json.load(f)
         logging.config.dictConfig(config)
-        
-load_logging_config() 
+
+    return logging.getLogger(__name__)
+
+
 logger = init_logger()
 
 app = FastAPI(
@@ -47,7 +42,3 @@ def get_jobs(skip: int = 0, limit: int = 10)-> List[JobResponse]:
     jobs = jobs_service.get_jobs(skip, limit)
     response= [JobResponse.create_from_dto(job) for job in jobs]
     return response
-
-
-
-
