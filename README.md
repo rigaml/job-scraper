@@ -83,15 +83,11 @@ If you are interested in a particular set of jobs to store in the database you c
 1. Go to `https://www.jobserve.com/gb/en/Job-Search/` and fill the search form with your requirements.
 2. After hitting Search button, you will be redirected to a search results page.
 3. From the URL you can obtain the session id `shid` value: `https://www.jobserve.com/gb/en/JobSearch.aspx?shid=<session-id>`
-4. Use the `config-base.json` to populate the session-id with your `shid` value
+4. In the `.env` file to add a line with JOBSERVE-SHID= the `shid` got in the URL
 
-```json
-{
-  "jobserve-shid": "<session-id>"
-}
+```plaintext
+JOBSERVE-SHID=<session-id>
 ```
-
-5. Rename `config-base.json` to `config.json` to this value is used by the application when querying.
 
 NOTE: After 2 days not accessing Jobserve with this session id, it will expire and you will need to repopulate the search as explained in previous steps.
 

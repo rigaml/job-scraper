@@ -5,14 +5,16 @@ Scrapes jobs from the specified jobs site and stores them in the database.
 """
 
 import json
+import os
 import sys
 import time
 import logging
 import logging.config
 
+from dotenv import load_dotenv
 from injector import Injector
 
-import app.settings as settings
+import app.config as config
 from app.dependency_module import DependencyModule
 
 from app.scrapers.jobs_scraper import JobsScraper
@@ -46,12 +48,12 @@ def scrape_jobs(scraper: JobsScraper, jobs_site_id: int, job_repo: JobRepository
     """
     with scraper as scraper_instance:
         try:
-            web_jobs = scraper_instance.scrape(settings.SCRAPE_RETRIEVE_MAX)
+            web_jobs = scraper_instance.scrape(config.SCRAPE_RETRIEVE_MAX)
         except Exception as e:
             logger.error("Error during scraping: %s", e)
             return
 
-        if settings.SCRAPE_SHOW_BROWSER:
+        if config.SCRAPE_SHOW_BROWSER:
             time.sleep(10)
 
     for web_job in web_jobs:
@@ -105,18 +107,19 @@ def main():
     """
     Main function to run the job scraper.
     """
-
+    load_dotenv()
+    
     injector = Injector([DependencyModule()])
 
     jobs_site_repo, job_repository = setup_database(injector.get(Database))
 
-    jobs_site = jobs_site_repo.get_by_name(settings.SCRAPE_SITE)
+    jobs_site = jobs_site_repo.get_by_name(config.SCRAPE_SITE)
     if not jobs_site:
-        logger.error("Jobs site %s not found in database.", settings.SCRAPE_SITE)
+        logger.error("Jobs site %s not found in database.", config.SCRAPE_SITE)
         sys.exit()
 
-    jobserve_session_id = settings.get_secret(settings.SCRAPE_SITE + "-shid")
-    jobserve_scraper = JobserveScraper(jobserve_session_id, settings.SCRAPE_SHOW_BROWSER)
+    jobserve_session_id = os.getenv(config.SCRAPE_SITE.upper()+"-SHID")
+    jobserve_scraper = JobserveScraper(jobserve_session_id, config.SCRAPE_SHOW_BROWSER)
 
     scrape_jobs(jobserve_scraper, jobs_site.id, job_repository)
     logger.info("Scraping ended")

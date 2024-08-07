@@ -5,7 +5,7 @@ fastapi
 httpx
 injector
 # Load secrets from .env
-python-env
+python-dotenv
 # Data analysis
 scikit-learn
 # Tests

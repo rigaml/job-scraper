@@ -8,14 +8,14 @@ to be able to create the tables. That is import database.job, import database.jo
 import os
 import sys
 
-import app.settings as settings
+import app.config as config
 from app.database.database import Database
 
 from database.jobs_site_repository import JobsSiteRepository
 
 if __name__ == "__main__":
 
-    database_path_name = settings.JOBS_DATABASE_PATH_NAME
+    database_path_name = config.JOBS_DATABASE_PATH_NAME
     if os.path.exists(database_path_name):
         print((f"Database already exist at: {database_path_name}." "Remove if want to create an empty one."))
         sys.exit()
